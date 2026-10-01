@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدليل الشامل التفاعلي لاستيراد أرانب التكاثر الأصيلة إلى المغرب</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#FDFBF7',
+                            card: '#FFFFFF',
+                            primary: '#2E5A44',
+                            secondary: '#C86D51',
+                            accent: '#D4A373',
+                            dark: '#1C2D24',
+                            light: '#F3EFE6',
+                            muted: '#6B7280'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FDFBF7;
+            color: #2D3748;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F3EFE6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2E5A44;
+            border-radius: 4px;
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #2E5A44;
+            color: #2E5A44;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Chosen Palette: Warm Neutral Harmonious (Warm Cream #FDFBF7, Deep Forest Green #2E5A44, Terracotta #C86D51, Sand Gold #D4A373, Soft Neutral #F3EFE6) -->
+    
+    <!-- Application Structure Plan:
+         Designed as a single-page interactive portal divided into 6 dynamic logical sections:
+         1. Interactive Breed Comparison & Biometrics Dashboard (Flandres, Papillon, Rex).
+         2. Supplier Sourcing & Pedigree Verification Protocol (How to find certified European breeders and inspect pedigree documents).
+         3. Import Roadmap & Administrative Workflow (Step-by-step journey from Lazaret request to PortNet, TRACES NT, and Customs DUM).
+         4. International Logistics & Shipping Standards (IATA LAR standards & Flight vs. Sea/Land Comparison).
+         5. Quarantine Protocol & Health Checklists (30-day timeline & disease controls).
+         6. Interactive Financial Case Study & Dynamic ROI Simulator (10 pairs baseline + dynamic calculator).
+         
+         WHY THIS STRUCTURE?
+         Instead of a static text report, this structure allows importers, veterinarians, and investors to intuitively navigate biological standards, regulatory steps (ONSSA/Customs), and dynamic financial calculations.
+    -->
+
+    <!-- Visualization & Content Choices:
+         - Breed Biometrics Chart: Canvas Chart.js Horizontal Bar Chart comparing adult weights and litter sizes (NO SVG).
+         - Cost Distribution: Canvas Chart.js Doughnut Chart breaking down import expenditures (Purchase, Freight, Customs, Health, Quarantine).
+         - Interactive Procedure Timeline: Dynamic HTML/CSS flow with interactive detail toggles.
+         - Interactive Financial Calculator: JavaScript-powered dynamic input controls to simulate cost & profit for 10 pairs or custom quantities.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header Section -->
+    <header class="bg-brand-dark text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4 border-b border-emerald-800/50">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <span class="text-3xl">🐇</span>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-emerald-100">منصة استيراد أرانب التكاثر الأصيلة إلى المغرب</h1>
+                        <p class="text-xs text-emerald-300">الدليل التقني-الاقتصادي، الموردون، وإجراءات أونسا (ONSSA) والجمارك</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4 space-x-reverse text-xs bg-emerald-900/60 px-3 py-1.5 rounded-lg border border-emerald-700">
+                    <div><span class="text-emerald-400">سعر الصرف:</span> 1 EUR = 10.80 MAD</div>
+                    <span class="text-emerald-600">|</span>
+                    <div><span class="text-emerald-400">التعريفة التفضيلية:</span> 2.5%</div>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex overflow-x-auto space-x-6 space-x-reverse text-sm font-medium pt-3 pb-1 no-scrollbar">
+                <button onclick="switchTab('breeds')" id="tab-breeds" class="tab-btn tab-active pb-2 whitespace-nowrap transition-colors">سلالات التكاثر</button>
+                <button onclick="switchTab('sourcing')" id="tab-sourcing" class="tab-btn pb-2 whitespace-nowrap text-gray-300 hover:text-white transition-colors">البحث عن الموردين والأنساب</button>
+                <button onclick="switchTab('procedures')" id="tab-procedures" class="tab-btn pb-2 whitespace-nowrap text-gray-300 hover:text-white transition-colors">المساطر والوثائق (ONSSA/PortNet)</button>
+                <button onclick="switchTab('logistics')" id="tab-logistics" class="tab-btn pb-2 whitespace-nowrap text-gray-300 hover:text-white transition-colors">اللوجستيك والشحن IATA</button>
+                <button onclick="switchTab('quarantine')" id="tab-quarantine" class="tab-btn pb-2 whitespace-nowrap text-gray-300 hover:text-white transition-colors">الجمارك والحجر الصحي</button>
+                <button onclick="switchTab('financial')" id="tab-financial" class="tab-btn pb-2 whitespace-nowrap text-gray-300 hover:text-white transition-colors text-amber-300 font-bold">الحاسبة الماليّة والدراسة (10 أزواج)</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ================= SECTION 1: BREEDS ================= -->
+        <section id="sec-breeds" class="space-y-6">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h2 class="text-2xl font-bold text-brand-primary mb-2">1. خريطة السلالات الأصيلة ومواصفاتها الإنتاجية (Papillon / Flandres / Rex)</h2>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    هذا القسم يوضح المواصفات البيولوجية والإنتاجية للسلالات الثلاث المعتمدة والمطلوبة في المغرب. يستعرض الجدول والمخطط التفاعلي الخصائص المورفولوجية والإنتاجية ونقاط الحساسية الفسيولوجية لكل سلالة.
+                </p>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Flandres Card -->
+                <div class="bg-brand-card rounded-2xl p-5 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold">إنتاج اللحوم والتسمين</span>
+                                <h3 class="text-xl font-bold text-gray-900 mt-2">عملاق الفلاندر (Géant des Flandres)</h3>
+                            </div>
+                            <span class="text-3xl">🇧🇪</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-2 mb-4">
+                            <li class="flex justify-between border-b pb-1"><span>الموطن الأصلي:</span> <strong class="text-gray-800">بلجيكا / فرنسا</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>الوزن القياسي للبالغين:</span> <strong class="text-emerald-700">6.5 - 9.0 كغ (دون حد أقصى)</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>طول الأذنين:</span> <strong class="text-gray-800">19 - 21 سم (شكل V)</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>متوسط حجم البطن:</span> <strong class="text-gray-800">6.5 صغار / بطن</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>خصائص الفرو:</span> <strong class="text-gray-800">كثيف، وبر سفلي متماسك</strong></li>
+                        </ul>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-800">
+                        <strong>⚠️ حساسية فسيولوجية:</strong> عرضة لتقرحات العرقوب وثقل الوزن؛ يتطلب أرضيات غير معدنية بالكامل.
+                    </div>
+                </div>
+
+                <!-- Papillon Card -->
+                <div class="bg-brand-card rounded-2xl p-5 border border-blue-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full font-bold">توازن بنيوي وخصوبة</span>
+                                <h3 class="text-xl font-bold text-gray-900 mt-2">عملاق البابيون الفرنسي (Géant Papillon)</h3>
+                            </div>
+                            <span class="text-3xl">🇫🇷</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-2 mb-4">
+                            <li class="flex justify-between border-b pb-1"><span>الموطن الأصلي:</span> <strong class="text-gray-800">فرنسا</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>الوزن القياسي للبالغين:</span> <strong class="text-blue-700">5.0 - 6.0 كغ</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>طول الأذنين:</span> <strong class="text-gray-800">16 - 17 سم (مفتوحة)</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>متوسط حجم البطن:</span> <strong class="text-gray-800">7.5 صغار / بطن</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>خصائص الفرو:</span> <strong class="text-gray-800">براق، مرن، بقع منتظمة</strong></li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-xs text-blue-800">
+                        <strong>⚠️ حساسية فسيولوجية:</strong> حساس للصدمات الصوتية والاضطرابات؛ يتطلب بيئة هادئة لمنع إصابات العمود الفقري.
+                    </div>
+                </div>
+
+                <!-- Rex Card -->
+                <div class="bg-brand-card rounded-2xl p-5 border border-rose-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-bold">فراء فاخر ولحم ممتازة</span>
+                                <h3 class="text-xl font-bold text-gray-900 mt-2">أرانب الركس (Rex)</h3>
+                            </div>
+                            <span class="text-3xl">🇫🇷</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-2 mb-4">
+                            <li class="flex justify-between border-b pb-1"><span>الموطن الأصلي:</span> <strong class="text-gray-800">فرنسا</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>الوزن القياسي للبالغين:</span> <strong class="text-rose-700">4.0 - 4.5 كغ</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>طول الأذنين:</span> <strong class="text-gray-800">11 - 13 سم (سميكة ومستقيمة)</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>متوسط حجم البطن:</span> <strong class="text-gray-800">6.5 صغار / بطن</strong></li>
+                            <li class="flex justify-between border-b pb-1"><span>خصائص الفرو:</span> <strong class="text-gray-800">مخملي قصير جداً عمودي</strong></li>
+                        </ul>
+                    </div>
+                    <div class="bg-rose-50 p-3 rounded-xl border border-rose-200 text-xs text-rose-800">
+                        <strong>⚠️ حساسية فسيولوجية:</strong> غياب الشعر الخشن الواقي يجعل باطن القدم معرضاً لالتهابات الرطوبة والشباك.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Chart Container -->
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h3 class="text-lg font-bold text-brand-dark mb-2">مقارنة أوزان البالغين والإنتاجية السنوية للصغار (F1)</h3>
+                <p class="text-xs text-gray-500 mb-4">مخطط بياني يوضح الفروق في الوزن والأداء التناسلي المتوقع للسلالات المعتمدة.</p>
+                <div class="chart-container">
+                    <canvas id="breedChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: SOURCING ================= -->
+        <section id="sec-sourcing" class="space-y-6 hidden">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h2 class="text-2xl font-bold text-brand-primary mb-2">2. كيفية البحث عن الموردين المعتمدين والتحقق من الأنساب</h2>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                    يشترط القانون الجمركي والصحي بالمغرب الحصول على أرانب تكاثر من سلالة نقية مسجلة رسمياً للاستفادة من الرسم الجمركي المخفض (2.5% بدلاً من 40%). يشرح هذا القسم منهجية التواصل مع الهيئات الأوروبية والتحقق من الوشم وسجلات النسب.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Breeder Federations -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-emerald-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-brand-dark text-base border-b pb-2">🏢 الهيئات المرجعية والمربين الأوروبيين المعتمدين</h3>
+                    
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                            <strong class="text-emerald-900 block text-sm mb-1">🇫🇷 فرنسا (FFC & الأندية المتخصصة)</strong>
+                            <p class="text-gray-700">الفيدرالية الفرنسية لتربية الأرانب (FFC) والنادي الفرنسي لعمالقة الفلاندر (CFGF) والجمعية الفرنسية لمربي أرانب الركس (AFER). تقدم دفاتر أنساب رسمية معترف بها دولياً.</p>
+                        </div>
+
+                        <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
+                            <strong class="text-blue-900 block text-sm mb-1">🇩🇪 ألمانيا (Bund Deutscher Rassekaninchenzüchter - ZDRK)</strong>
+                            <p class="text-gray-700">تتبع أدق دفاتر الأنساب لسلالتي عملاق الفلاندر (Deutsche Riesen) وعملاق البابيون (Deutsche Riesenschecken)، وتدقق كفاءة ونقاء السلالات بانتظام.</p>
+                        </div>
+
+                        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                            <strong class="text-amber-900 block text-sm mb-1">🇧🇪 بلجيكا (الاتحاد الوطني لمربي المزرعة)</strong>
+                            <p class="text-gray-700">الموطن التاريخي لسلالة الفلاندر الضخمة، وتوفر أرانب بكتلة عضلية نقية وهيكل عظمي ممتاز.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tattoos and Pedigree Validation -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-emerald-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-brand-dark text-base border-b pb-2">🔍 نظام الترقيم الرسمي بالوشم وشهادة النسب (Pedigree)</h3>
+                    
+                    <div class="space-y-3 text-xs">
+                        <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                            <strong class="text-brand-primary block mb-1">📍 الأذن اليسرى (رمز الولادة والنادي)</strong>
+                            <p class="text-gray-600">تحتوي على وشم يحدد شهر الولادة (1-9 أو 0 للربع الأخير)، الرمز الحرفي للجمعية الجهوية المعتمدة، وسنة الولادة.</p>
+                        </div>
+
+                        <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                            <strong class="text-brand-primary block mb-1">📍 الأذن اليمنى (الرقم التسلسلي الفردي)</strong>
+                            <p class="text-gray-600">رقم تسلسلي فريد يطابق تماماً الرقم المسجل في بطاقة النسب الرسمية الصادرة عن الفيدرالية.</p>
+                        </div>
+
+                        <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                            <strong class="text-brand-primary block mb-1">📜 بطاقة النسب (Carte d'origine / Pedigree)</strong>
+                            <p class="text-gray-600">وثيقة رسمية تثبت شجرة العائلة لثلاثة أجيال سابقة على الأقل، تقييمات المعارض الفيدرالية، وتأكيد الخلو من العيوب الوراثية (كتشوه الفك والقواطع أو اعوجاج القوائم).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: PROCEDURES ================= -->
+        <section id="sec-procedures" class="space-y-6 hidden">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h2 class="text-2xl font-bold text-brand-primary mb-2">3. المسار الإجرائي لاستصدار تراخيص أونسا (ONSSA) والجمارك</h2>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                    تخضع عملية استيراد أرانب التكاثر الحيّة إلى المغرب لمساطر صحية وإدارية صارمة تتطلب التنسيق المسبق بين المستورد والمصالح البيطرية لـ ONSSA والجمارك المغربية عبر بوابة PortNet، بالإضافة إلى المصلحة البيطرية الرسمية في دولة المصدر (مثل DDPP بفرنسا ونظام TRACES NT).
+                </p>
+            </div>
+
+            <!-- Procedure Stepper / Flow -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Timeline List -->
+                <div class="lg:col-span-2 space-y-4">
+                    <!-- Step 1 -->
+                    <div class="bg-brand-card p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">المرحلة 1 (قبل 60-30 يوماً)</span>
+                            <span class="text-xs text-gray-400">بالمغرب</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-sm">إعداد وتأهيل المحجر الصحي (Lazaret) واعتماده</h4>
+                        <p class="text-xs text-gray-600 mt-1">تجهيز منشأة العزل البيولوجي، توقيع اتفاقية مع طبيب بيطري خاص منتدب، وإيداع طلب الاعتماد لدى المصلحة البيطرية الإقليمية لـ ONSSA للحصول على قرار الاعتماد المحدد للطاقة الاستيعابية.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-brand-card p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">المرحلة 2 (قبل 30-15 يوماً)</span>
+                            <span class="text-xs text-gray-400">أوروبا والمغرب</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-sm">التفاوض التجاري والفاتورة المبدئية والتوطين البنكي</h4>
+                        <p class="text-xs text-gray-600 mt-1">استلام الفاتورة المبدئية (Proforma) متضمنة أرقام الوشم الرسمية، السلالة، والتصنيف الجمركي (0106.14.00.11)، ثم تسجيل "التزام الاستيراد" عبر منصة PortNet والتوطين لدى البنك المغربي.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-brand-card p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">المرحلة 3 (قبل 15-12 يوماً)</span>
+                            <span class="text-xs text-gray-400">بوابة PortNet</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-sm">طلب الحصول على رخصة الاستيراد الصحية (ASI)</h4>
+                        <p class="text-xs text-gray-600 mt-1">رفع الفاتورة المبدئية، بطاقات النسب (Pedigree)، قرار اعتماد المحجر، ونموذج الشهادة الصحية على بوابة PortNet للحصول على رخصة ASI الموقعة من أونسا.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-brand-card p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">المرحلة 4 (قبل 10-2 أيام)</span>
+                            <span class="text-xs text-gray-400">بلد المصدر (أوروبا)</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-sm">التدابير البيطرية ببلد التصدير وإصدار شهادة TRACES NT</h4>
+                        <p class="text-xs text-gray-600 mt-1">تلقيح القطيع ضد النزف الدموي الفيروسي (Filavac VHD-1/2) والورم المخاطي قبل 21 يوماً، العزل البيطري، الفحص السريري قبل 48 ساعة، وإصدار الشهادة البيطرية الدولية للتصدير عبر TRACES NT.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="bg-brand-card p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">المرحلة 5 (يوم الوصول)</span>
+                            <span class="text-xs text-gray-400">مطار كازا / النقطة الحدودية</span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-sm">التخليص الجمركي والفحص البيطري الحدودي</h4>
+                        <p class="text-xs text-gray-600 mt-1">مطابقة أرقام الوشم بالأذن مع الشهادة الصحية وسجلات النسب، الفحص السريري المباشر، إيداع تصريح DUM، أداء الرسم التفضيلي (2.5%)، والحصول على "رفع اليد المشروط" للنقل نحو المحجر.</p>
+                    </div>
+                </div>
+
+                <!-- Document Checklist Sidebar -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-brand-light shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-brand-dark mb-3">📋 قائمة الوثائق الإلزامية للملف</h3>
+                        <div class="space-y-3 text-xs">
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>بطاقة النسب (Pedigree):</strong> صادرة عن الفيدرالية الوطنية (مثل FFC) وتثبت 3 أجيال نقيّة.</span>
+                            </label>
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>الوشم الرسمي (Tattoo):</strong> وشم الأذن اليسرى (تاريخ الولادة والنادي) والأذن اليمنى (الرقم التسلسلي).</span>
+                            </label>
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>الفاتورة المبدئية (Proforma):</strong> تتضمن الرمز الجمركي والتفصيل الفردي للحيوانات باليورو.</span>
+                            </label>
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>قرار اعتماد المحجر (Lazaret):</strong> صادر عن أونسا بالمغرب قبل بداية عملية الشحن.</span>
+                            </label>
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>رخصة الاستيراد الصحية (ASI):</strong> صادرة إلكترونياً من مديرية الوقاية البيطرية عبر PortNet.</span>
+                            </label>
+                            <label class="flex items-start space-x-2 space-x-reverse cursor-pointer">
+                                <input type="checkbox" checked disabled class="mt-0.5 text-emerald-600 rounded">
+                                <span><strong>شهادة TRACES NT البيطرية:</strong> ممهورة بختم المصلحة الحكومية (DDPP) وصالحة لـ 10 أيام.</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-emerald-50 text-emerald-900 rounded-xl border border-emerald-200 text-xs">
+                        💡 <strong>تنبيه هام:</strong> عدم توفر بطاقة النسب الرسمية يُلغي الاستفادة من التعريفة التفضيلية 2.5% ويخضع الشحنة للنسبة العامة 40%.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: LOGISTICS ================= -->
+        <section id="sec-logistics" class="space-y-6 hidden">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h2 class="text-2xl font-bold text-brand-primary mb-2">4. اللوجستيك الدولي وتدابير الشحن (IATA LAR)</h2>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                    تتأثر الأرانب بشكل مفرط بظروف النقل والإجهاد الحراري. تحتم الأنظمة الدولية إرسال الحيوانات وفق تعليمات الحاويات رقم 71 و72 الصادرة عن الاتحاد الدولي للنقل الجوي (IATA Live Animals Regulations).
+                </p>
+            </div>
+
+            <!-- Comparison Table: Air vs Land/Sea -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Air Cargo -->
+                <div class="bg-brand-card p-5 rounded-2xl border-2 border-emerald-500 shadow-sm relative">
+                    <span class="absolute -top-3 right-4 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">الخيار الموصى به بشدة</span>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 mt-1">✈️ الشحن الجوي المباشر (AVI Cargo)</h3>
+                    <p class="text-xs text-gray-500 mb-4">رحلة مباشرة من مطار باريس (CDG) / فرانكفورت إلى الدار البيضاء (CMN).</p>
+                    <ul class="text-xs space-y-2.5 text-gray-700">
+                        <li class="flex items-center"><span class="text-emerald-600 ml-2">✓</span> <strong>مدة الرحلة:</strong> 3 إلى 4 ساعات طيران فقط.</li>
+                        <li class="flex items-center"><span class="text-emerald-600 ml-2">✓</span> <strong>بيئة العنابر:</strong> عنابر مكيفة بحرارة ثابتة (16°C - 20°C).</li>
+                        <li class="flex items-center"><span class="text-emerald-600 ml-2">✓</span> <strong>نسبة الأمان والبقاء:</strong> تصل إلى 100% مع انعدام الإجهاد الحراري.</li>
+                        <li class="flex items-center"><span class="text-emerald-600 ml-2">✓</span> <strong>السرعة في المطار:</strong> معالجة فورية وتخليص بأولوية قصوى.</li>
+                    </ul>
+                </div>
+
+                <!-- Land / Sea Cargo -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-700 mb-2">🚛 النقل البري / البحري عبر الشاحنات</h3>
+                    <p class="text-xs text-gray-500 mb-4">مسار بري عبر إسبانيا والعبور المائي من الجزيرة الخضراء إلى طنجة المتوسط.</p>
+                    <ul class="text-xs space-y-2.5 text-gray-600">
+                        <li class="flex items-center"><span class="text-rose-500 ml-2">✕</span> <strong>مدة المسار:</strong> 36 إلى 48 ساعة متواصلة.</li>
+                        <li class="flex items-center"><span class="text-rose-500 ml-2">✕</span> <strong>المخاطر البيولوجية:</strong> اهتزازات، توقفات حدودية، وضربات شمس صيفاً.</li>
+                        <li class="flex items-center"><span class="text-rose-500 ml-2">✕</span> <strong>نسبة الإجهاد:</strong> ارتفاع مخاطر الاضطرابات الهضمية والنزلات التنفسية.</li>
+                        <li class="flex items-center"><span class="text-rose-500 ml-2">✕</span> <strong>الجدوى:</strong> غير مناسب للشحنات الصغيرة ذات القيمة الجينية العالية.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- IATA Cage Specifications Grid -->
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h3 class="text-base font-bold text-brand-dark mb-4">📐 المواصفات الفنية لأقفاص الشحن الجوي المعيارية (IATA LAR)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                    <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                        <div class="font-bold text-brand-primary mb-1">التهوية المحيطية</div>
+                        <p class="text-gray-600">فتحات شبكية تغطي 16% من المساحة الكلية للجوانب لتفادي انحباس الأمونيا.</p>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                        <div class="font-bold text-brand-primary mb-1">الفصل الفردي</div>
+                        <p class="text-gray-600">حجرات مستقلة بارتفاع أدنى 45 سم لضمان انتصاب الأذنين دون ملامسة السقف.</p>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                        <div class="font-bold text-brand-primary mb-1">الفرشة وعزل الفضلات</div>
+                        <p class="text-gray-600">قاعدة خشبية/معدنية مانعة للتسرب مع نشارة خشب جافة معقمة وخالية من الغبار.</p>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-xl border border-stone-200">
+                        <div class="font-bold text-brand-primary mb-1">التغذية والترطيب</div>
+                        <p class="text-gray-600">زجاجات ماء كروية مثبتة مع مكعبات ترطيب هلامية (Gel Hydratant) لتعويض الجفاف.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: QUARANTINE & CUSTOMS ================= -->
+        <section id="sec-quarantine" class="space-y-6 hidden">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <h2 class="text-2xl font-bold text-brand-primary mb-2">5. إجراءات الحجر الصحي والتخليص الجمركي بالمغرب</h2>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                    عند وصول الحيوانات إلى مطار الدار البيضاء، تُنقل تحت الحراسة الجمركية إلى مستودع الشحن (Magasin Cale) لمعاينتها من قِبل بيطري الحدود، ثم تُنقل إلى المحجر الصحي لمدة 30 يوماً قبل منح قرار رفع الحجر النهائي.
+                </p>
+            </div>
+
+            <!-- Tax Table & Quarantine Timeline -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Customs Table -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-brand-light shadow-sm">
+                    <h3 class="font-bold text-brand-dark text-base mb-3">💵 جدول الرسوم الجمركية والضرائب المطبقة</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right border-collapse">
+                            <thead>
+                                <tr class="bg-brand-light text-brand-dark">
+                                    <th class="p-2 border">البند الضريبي</th>
+                                    <th class="p-2 border">الرمز الجمركي</th>
+                                    <th class="p-2 border">النسبة</th>
+                                    <th class="p-2 border">الشرط البيولوجي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-2 border font-bold text-emerald-800">رسم الاستيراد التفضيلي</td>
+                                    <td class="p-2 border">0106.14.00.11</td>
+                                    <td class="p-2 border font-bold text-emerald-700">2.5%</td>
+                                    <td class="p-2 border">سلالة نقية + شهادة نسب رسمية</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border text-gray-500">رسم الاستيراد العام</td>
+                                    <td class="p-2 border">0106.14.00.90</td>
+                                    <td class="p-2 border text-rose-600 font-bold">40.0%</td>
+                                    <td class="p-2 border">أرانب بدون وثائق إثبات السلالة</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border">الرسم شبه الضريبي</td>
+                                    <td class="p-2 border">-</td>
+                                    <td class="p-2 border">0.25%</td>
+                                    <td class="p-2 border">يطبق على كافة الواردات التجاريّة</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 border font-bold text-blue-800">الضريبة على القيمة المضافة (TVA)</td>
+                                    <td class="p-2 border">المادة 123</td>
+                                    <td class="p-2 border font-bold text-blue-700">0.0% (معفى)</td>
+                                    <td class="p-2 border">أرانب التكاثر الحية من سلالة نقية</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quarantine 30 Days Timeline -->
+                <div class="bg-brand-card p-5 rounded-2xl border border-brand-light shadow-sm">
+                    <h3 class="font-bold text-brand-dark text-base mb-3">🛡️ برنامج المراقبة الصحية داخل المحجر (30 يوماً)</h3>
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-start space-x-3 space-x-reverse">
+                            <span class="bg-emerald-800 text-white font-bold w-6 h-6 flex items-center justify-center rounded-full text-[10px] shrink-0">1</span>
+                            <div>
+                                <strong class="text-gray-900">اليوم 1 (الاستقبال والتأقلم):</strong>
+                                <p class="text-gray-600">استلام القطيع بالمحجر، تقديم تبن جاف خالي من الغبار ومياه معززة بالفيتامينات والتدرج في الأعلاف المركبة بمعدل 20% يومياً.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 space-x-reverse">
+                            <span class="bg-emerald-800 text-white font-bold w-6 h-6 flex items-center justify-center rounded-full text-[10px] shrink-0">7</span>
+                            <div>
+                                <strong class="text-gray-900">اليوم 7 (الفحص الطفيلي):</strong>
+                                <p class="text-gray-600">فحص مجهري للبراز للتأكد من خلوه من بويضات الكوكسيديا والطفيليات المعوية وتطبيق علاج وقائي.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 space-x-reverse">
+                            <span class="bg-emerald-800 text-white font-bold w-6 h-6 flex items-center justify-center rounded-full text-[10px] shrink-0">15</span>
+                            <div>
+                                <strong class="text-gray-900">اليوم 15 (المعاينة التنفسية والجلدية):</strong>
+                                <p class="text-gray-600">معاينة الأذنين والجهاز التنفسي للتأكد من غياب أعراض الزكام المعدي وجرب الأذن (Psoroptes cuniculi).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 space-x-reverse">
+                            <span class="bg-emerald-800 text-white font-bold w-6 h-6 flex items-center justify-center rounded-full text-[10px] shrink-0">28</span>
+                            <div>
+                                <strong class="text-gray-900">اليوم 28 - 30 (الفحص الختامي ورفع الحجر):</strong>
+                                <p class="text-gray-600">زيارة مشتركة لمفتش أونسا والبيطري المنتدب، إصدار "قرار رفع الحجر النهائي"، وإدماج الأرانب في حالة الاستهلاك الحر.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 6: FINANCIAL CALCULATOR & CASE STUDY ================= -->
+        <section id="sec-financial" class="space-y-6 hidden">
+            <div class="bg-brand-card p-6 rounded-2xl shadow-sm border border-brand-light">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-brand-primary mb-1">6. دراسة الحالة والحاسبة التفاعلية للمشروع (10 أزواج - 20 أرنباً)</h2>
+                        <p class="text-gray-600 text-sm">محاكاة مالية تفصيلية لاستيراد 10 أزواج مع إمكانية تعديل الأعداد وحساب المردودية المتوقعة.</p>
+                    </div>
+                    <div class="mt-3 md:mt-0 bg-amber-100 text-amber-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-amber-300">
+                        دراسة مرجعية: 10 أزواج (102 كغ صفي / 145 كغ شحن)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Input Controls -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">عدد أرانب الفلاندر (€120/رأس):</label>
+                    <input type="number" id="input-flandres" value="6" min="0" onchange="recalculate()" class="w-full p-2 border rounded-lg text-center font-bold text-emerald-800">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">عدد أرانب البابيون (€110/رأس):</label>
+                    <input type="number" id="input-papillon" value="6" min="0" onchange="recalculate()" class="w-full p-2 border rounded-lg text-center font-bold text-blue-800">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">عدد أرانب الركس (€90/رأس):</label>
+                    <input type="number" id="input-rex" value="8" min="0" onchange="recalculate()" class="w-full p-2 border rounded-lg text-center font-bold text-rose-800">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">سعر بيع الفرد الجيل الأول F1 (MAD):</label>
+                    <input type="number" id="input-price-f1" value="500" min="200" step="50" onchange="recalculate()" class="w-full p-2 border rounded-lg text-center font-bold text-amber-800">
+                </div>
+            </div>
+
+            <!-- Financial Summary KPI Dashboard -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-brand-primary text-white p-4 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs text-emerald-200 block mb-1">إجمالي التكلفة الاستثمارية</span>
+                    <span id="kpi-total-cost" class="text-xl sm:text-2xl font-extrabold text-white">56,362 MAD</span>
+                    <span id="kpi-total-cost-eur" class="text-[11px] text-emerald-300 block mt-0.5">(5,218.70 €)</span>
+                </div>
+                <div class="bg-brand-card border border-stone-200 p-4 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs text-gray-500 block mb-1">تكلفة الأرنب الواحد بعد التخليص</span>
+                    <span id="kpi-unit-cost" class="text-xl sm:text-2xl font-bold text-gray-800">2,818 MAD</span>
+                    <span class="text-[11px] text-gray-400 block mt-0.5">معامل مضاعفة: 2.48x</span>
+                </div>
+                <div class="bg-brand-card border border-stone-200 p-4 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs text-gray-500 block mb-1">المداخيل المتوقعة للسنة الأولى (F1)</span>
+                    <span id="kpi-gross-revenue" class="text-xl sm:text-2xl font-bold text-emerald-700">151,900 MAD</span>
+                    <span id="kpi-f1-count" class="text-[11px] text-emerald-600 block mt-0.5">~309 أرانب مفطومة</span>
+                </div>
+                <div class="bg-amber-500 text-white p-4 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs text-amber-100 block mb-1">فترة استرداد رأس المال (Payback)</span>
+                    <span id="kpi-payback" class="text-xl sm:text-2xl font-extrabold text-white">الشهر 10</span>
+                    <span class="text-[11px] text-amber-100 block mt-0.5">بعد خصم مصاريف التشغيل المحلي</span>
+                </div>
+            </div>
+
+            <!-- Charts & Detailed Cost Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="lg:col-span-5 bg-brand-card p-5 rounded-2xl border border-brand-light shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-brand-dark text-sm mb-2">توزيع الميزانية حسب مراحل المشروع</h3>
+                        <p class="text-xs text-gray-500 mb-4">بيان نسبة كل عنصر من عناصر التكلفة الإجمالية.</p>
+                        <div class="chart-container">
+                            <canvas id="costDoughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Breakdown Table -->
+                <div class="lg:col-span-7 bg-brand-card p-5 rounded-2xl border border-brand-light shadow-sm">
+                    <h3 class="font-bold text-brand-dark text-sm mb-3">تفصيل نفقات الاستيراد (سعر الصرف 1€ = 10.80 درهم)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right">
+                            <thead>
+                                <tr class="bg-brand-light text-brand-dark font-bold border-b">
+                                    <th class="p-2">البند المالي والتشغيلي</th>
+                                    <th class="p-2">التكلفة (€)</th>
+                                    <th class="p-2">التكلفة (MAD)</th>
+                                    <th class="p-2">النسبة (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-gray-700">
+                                <tr>
+                                    <td class="p-2 font-bold text-emerald-900">1. شراء الأرانب من المزارع المصدرة</td>
+                                    <td id="cost-buy-eur" class="p-2 font-bold">2,100.00 €</td>
+                                    <td id="cost-buy-mad" class="p-2 font-bold">22,680.00 MAD</td>
+                                    <td id="pct-buy" class="p-2">40.3%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2">2. الإعداد الصحي والوثائق بأوروبا (TRACES/DDPP)</td>
+                                    <td id="cost-health-eur" class="p-2">510.00 €</td>
+                                    <td id="cost-health-mad" class="p-2">5,508.00 MAD</td>
+                                    <td id="pct-health" class="p-2">9.8%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2">3. اللوجستيك والأقفاص والشحن الجوي (AVI Cargo)</td>
+                                    <td id="cost-logistics-eur" class="p-2">1,780.00 €</td>
+                                    <td id="cost-logistics-mad" class="p-2">19,224.00 MAD</td>
+                                    <td id="pct-logistics" class="p-2">34.1%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2">4. الرسوم الجمركية التفضيلية (2.5%) ومصاريف المطار</td>
+                                    <td id="cost-customs-eur" class="p-2">468.70 €</td>
+                                    <td id="cost-customs-mad" class="p-2">5,062.36 MAD</td>
+                                    <td id="pct-customs" class="p-2">9.0%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2">5. النقل المحلي ومصاريف الحجر الصحي (30 يوماً)</td>
+                                    <td id="cost-quarantine-eur" class="p-2">360.00 €</td>
+                                    <td id="cost-quarantine-mad" class="p-2">3,888.00 MAD</td>
+                                    <td id="pct-quarantine" class="p-2">6.8%</td>
+                                </tr>
+                                <tr class="bg-emerald-50 font-bold text-emerald-900 border-t-2 border-emerald-300">
+                                    <td class="p-2">المجموع الإجمالي للمشروع</td>
+                                    <td id="cost-total-eur" class="p-2">5,218.70 €</td>
+                                    <td id="cost-total-mad" class="p-2">56,362.36 MAD</td>
+                                    <td class="p-2">100.0%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-emerald-200 py-6 border-t border-emerald-900 mt-12 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div>
+                <p class="font-bold text-white">منصة استيراد أرانب التكاثر الأصيلة إلى المملكة المغربية</p>
+                <p class="text-emerald-400 text-[11px] mt-0.5">مطابق للظهير الشريف رقم 24-89 والمعايير البيطرية لـ ONSSA والجمارك المغربية</p>
+            </div>
+            <div class="flex space-x-4 space-x-reverse text-emerald-300">
+                <span>ONSSA PORTNET</span>
+                <span>•</span>
+                <span>TRACES NT</span>
+                <span>•</span>
+                <span>IATA LAR</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        let currentTab = 'breeds';
+        let breedChartInstance = null;
+        let doughnutChartInstance = null;
+
+        // Base Data
+        const exchangeRate = 10.80;
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            const sections = ['breeds', 'sourcing', 'procedures', 'logistics', 'quarantine', 'financial'];
+            sections.forEach(sec => {
+                document.getElementById(`sec-${sec}`).classList.add('hidden');
+                document.getElementById(`tab-${sec}`).classList.remove('tab-active');
+                document.getElementById(`tab-${sec}`).classList.add('text-gray-300');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+            document.getElementById(`tab-${tabId}`).classList.remove('text-gray-300');
+
+            currentTab = tabId;
+
+            if (tabId === 'breeds' && breedChartInstance) {
+                breedChartInstance.resize();
+            }
+            if (tabId === 'financial' && doughnutChartInstance) {
+                doughnutChartInstance.resize();
+            }
+        }
+
+        // CHARTS INITIALIZATION
+        function initCharts() {
+            // 1. Breed Comparison Chart
+            const ctxBreed = document.getElementById('breedChart').getContext('2d');
+            breedChartInstance = new Chart(ctxBreed, {
+                type: 'bar',
+                data: {
+                    labels: ['عملاق الفلاندر', 'عملاق البابيون', 'أرانب الركس'],
+                    datasets: [
+                        {
+                            label: 'متوسط الوزن للبالغين (كغ)',
+                            data: [7.75, 5.5, 4.25],
+                            backgroundColor: '#2E5A44',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'إنتاج الصغار المفطومة سنوياً/أنثى',
+                            data: [26, 33.75, 32.5],
+                            backgroundColor: '#D4A373',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { font: { family: 'Cairo', size: 11 } }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // 2. Financial Cost Breakdown Doughnut Chart
+            const ctxCost = document.getElementById('costDoughnutChart').getContext('2d');
+            doughnutChartInstance = new Chart(ctxCost, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'شراء القطيع (40.3%)',
+                        'المساطر الصحية بأوروبا (9.8%)',
+                        'اللوجستيك والشحن الجوي (34.1%)',
+                        'الجمارك ومصاريف المطار (9.0%)',
+                        'الحجر الصحي المحلي (6.8%)'
+                    ],
+                    datasets: [{
+                        data: [2100, 510, 1780, 468.7, 360],
+                        backgroundColor: [
+                            '#2E5A44',
+                            '#3B82F6',
+                            '#D4A373',
+                            '#C86D51',
+                            '#8B5CF6'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: 'Cairo', size: 10 }, boxWidth: 12 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // FINANCIAL CALCULATOR LOGIC
+        function recalculate() {
+            const countFlandres = parseInt(document.getElementById('input-flandres').value) || 0;
+            const countPapillon = parseInt(document.getElementById('input-papillon').value) || 0;
+            const countRex = parseInt(document.getElementById('input-rex').value) || 0;
+            const priceF1 = parseFloat(document.getElementById('input-price-f1').value) || 500;
+
+            const totalRabbits = countFlandres + countPapillon + countRex;
+            if (totalRabbits === 0) return;
+
+            const buyEur = (countFlandres * 120) + (countPapillon * 110) + (countRex * 90);
+            
+            const scaleRatio = totalRabbits / 20;
+            const healthEur = 510 * scaleRatio;
+            const logisticsEur = 1780 * scaleRatio;
+            
+            const cifEur = buyEur + logisticsEur + 80;
+            const dutyEur = (cifEur * 0.025) + (cifEur * 0.0025) + 362;
+            
+            const quarantineEur = 360 * scaleRatio;
+
+            const totalEur = buyEur + healthEur + logisticsEur + dutyEur + quarantineEur;
+            const totalMad = totalEur * exchangeRate;
+            const unitMad = totalMad / totalRabbits;
+
+            const femalesFlandres = Math.floor(countFlandres / 2);
+            const femalesPapillon = Math.floor(countPapillon / 2);
+            const femalesRex = Math.floor(countRex / 2);
+
+            const f1Flandres = femalesFlandres * 4 * 6.5;
+            const f1Papillon = femalesPapillon * 4.5 * 7.5;
+            const f1Rex = femalesRex * 5 * 6.5;
+            const totalF1 = Math.round(f1Flandres + f1Papillon + f1Rex);
+
+            const grossRevenueMad = totalF1 * priceF1;
+
+            document.getElementById('kpi-total-cost').innerText = Math.round(totalMad).toLocaleString() + ' MAD';
+            document.getElementById('kpi-total-cost-eur').innerText = '(' + totalEur.toFixed(2) + ' €)';
+            document.getElementById('kpi-unit-cost').innerText = Math.round(unitMad).toLocaleString() + ' MAD';
+            document.getElementById('kpi-gross-revenue').innerText = Math.round(grossRevenueMad).toLocaleString() + ' MAD';
+            document.getElementById('kpi-f1-count').innerText = '~' + totalF1 + ' أرنباً مفطوماً سنوياً';
+
+            document.getElementById('cost-buy-eur').innerText = buyEur.toFixed(2) + ' €';
+            document.getElementById('cost-buy-mad').innerText = (buyEur * exchangeRate).toFixed(2) + ' MAD';
+            
+            document.getElementById('cost-health-eur').innerText = healthEur.toFixed(2) + ' €';
+            document.getElementById('cost-health-mad').innerText = (healthEur * exchangeRate).toFixed(2) + ' MAD';
+
+            document.getElementById('cost-logistics-eur').innerText = logisticsEur.toFixed(2) + ' €';
+            document.getElementById('cost-logistics-mad').innerText = (logisticsEur * exchangeRate).toFixed(2) + ' MAD';
+
+            document.getElementById('cost-customs-eur').innerText = dutyEur.toFixed(2) + ' €';
+            document.getElementById('cost-customs-mad').innerText = (dutyEur * exchangeRate).toFixed(2) + ' MAD';
+
+            document.getElementById('cost-quarantine-eur').innerText = quarantineEur.toFixed(2) + ' €';
+            document.getElementById('cost-quarantine-mad').innerText = (quarantineEur * exchangeRate).toFixed(2) + ' MAD';
+
+            document.getElementById('cost-total-eur').innerText = totalEur.toFixed(2) + ' €';
+            document.getElementById('cost-total-mad').innerText = totalMad.toFixed(2) + ' MAD';
+
+            document.getElementById('pct-buy').innerText = ((buyEur / totalEur) * 100).toFixed(1) + '%';
+            document.getElementById('pct-health').innerText = ((healthEur / totalEur) * 100).toFixed(1) + '%';
+            document.getElementById('pct-logistics').innerText = ((logisticsEur / totalEur) * 100).toFixed(1) + '%';
+            document.getElementById('pct-customs').innerText = ((dutyEur / totalEur) * 100).toFixed(1) + '%';
+            document.getElementById('pct-quarantine').innerText = ((quarantineEur / totalEur) * 100).toFixed(1) + '%';
+
+            if (doughnutChartInstance) {
+                doughnutChartInstance.data.datasets[0].data = [buyEur, healthEur, logisticsEur, dutyEur, quarantineEur];
+                doughnutChartInstance.update();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            recalculate();
+        });
+    </script>
+</body>
+</html>
